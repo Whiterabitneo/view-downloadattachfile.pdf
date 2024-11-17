@@ -9,7 +9,7 @@ body{
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: url(bg3.jpeg) no-repeat;
+  background: url(bg3.jpg) no-repeat;
   background-size: cover;
   background-position: center;
 }
@@ -121,6 +121,7 @@ h3{
 
 h3{
     text-align: center;
+    color: red;
 }
 
 .h3{
